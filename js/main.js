@@ -7,7 +7,8 @@ var cursor_pos = {
 
 const MODES = {
 	NORMAL: 1,
-	INSERT: 2
+	INSERT: 2,
+	REPLACE: 3
 }
 
 var mode = MODES.NORMAL
@@ -79,6 +80,8 @@ function keyPressed() {
 
 		else if (key === 'i') { // set modes
 			switch_mode(MODES.INSERT)
+		} else if (key === 'r') { // set modes
+			switch_mode(MODES.REPLACE)
 		}
 	} else if (mode == MODES.INSERT) {
 		if (keyCode == ESCAPE) { // change mode back to normal
@@ -100,9 +103,7 @@ function keyPressed() {
 				if (text_storage[cursor_pos.y - 1][cursor_pos.x] == undefined) cursor_pos.x = text_storage[cursor_pos.y - 1].length
 				cursor_pos.y--
 			}
-		}
-
-		else if (keyCode == BACKSPACE) { // delete char
+		} else if (keyCode == BACKSPACE) { // delete char
 			if (cursor_pos.x > 0) {
 				remove_char(cursor_pos.y, cursor_pos.x)
 				cursor_pos.x--
@@ -118,6 +119,10 @@ function keyPressed() {
 			cursor_pos.y++
 			cursor_pos.x = 0
 		}
+	} else if (mode == MODES.REPLACE) {
+		if (keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW || keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == ESCAPE) {
+			switch_mode(MODES.NORMAL)
+		}
 	}
 }
 
@@ -132,6 +137,10 @@ function keyTyped() { // using different function for text input, bc it does not
 	if (mode == MODES.INSERT) {
 		insert_char(key, cursor_pos.y, cursor_pos.x)
 		cursor_pos.x++
+	} else if (mode == MODES.REPLACE) {
+		remove_char(cursor_pos.y, cursor_pos.x + 1)
+		insert_char(key, cursor_pos.y, cursor_pos.x)
+		switch_mode(MODES.NORMAL)
 	}
 }
 
@@ -151,7 +160,13 @@ function mousePressed() {
 			if (mouseX < textWidth(text_storage[clicked_y].substring(0, i )) + text_size) clicked_x = i - 1
 		}
 	}
-	cursor_pos.y = clicked_y
-	if(mode == MODES.NORMAL) cursor_pos.x = (clicked_x == -1) ? text_storage[clicked_y].length - 1 : clicked_x
-	else if(mode == MODES.INSERT) cursor_pos.x = (clicked_x == -1) ? text_storage[clicked_y].length : clicked_x
+	if(mode == MODES.NORMAL) {
+		cursor_pos.y = clicked_y
+		cursor_pos.x = (clicked_x == -1) ? text_storage[clicked_y].length - 1 : clicked_x
+	} else if(mode == MODES.INSERT) {
+		cursor_pos.y = clicked_y
+		cursor_pos.x = (clicked_x == -1) ? text_storage[clicked_y].length : clicked_x
+	} else if (mode == MODES.REPLACE) {
+		switch_mode(MODES.NORMAL)
+	} 
 }

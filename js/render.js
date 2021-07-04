@@ -24,6 +24,16 @@ function render_cursor() {
 		rect(textWidth(text_storage[cursor_pos.y].substring(0, cursor_pos.x)) + text_size, 
 			cursor_pos.y * text_size + 0.2 * text_size,
 			2, text_size)
+	} else if (mode == MODES.REPLACE) {
+		if (cursor_pos.x > 0) {
+		rect(textWidth(text_storage[cursor_pos.y].substring(0, cursor_pos.x)) + text_size, 
+			cursor_pos.y * text_size + 1.1 * text_size,
+			textWidth(text_storage[cursor_pos.y][cursor_pos.x]), 0.1 * text_size)
+		} else {
+			rect(text_size,
+			cursor_pos.y * text_size + 1.1 * text_size,
+			textWidth("A"), 0.1 * text_size)
+		}
 	}
 }
 
@@ -31,6 +41,7 @@ function render_mode() {
 	var mode_text ="Mode: "
 	if (mode == MODES.NORMAL) mode_text += "NORMAL"
 	else if (mode == MODES.INSERT) mode_text += "INSERT"
+	else if (mode == MODES.REPLACE) mode_text += "REPLACE"
 	fill(170)
 	text(mode_text, windowWidth - textWidth(mode_text) - textWidth("A"), windowHeight - textAscent(mode_text))
 }
