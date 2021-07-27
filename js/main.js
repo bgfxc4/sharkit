@@ -6,10 +6,16 @@ var cursor_pos = {
 }
 
 const MODES = {
-	NORMAL: 1,
-	INSERT: 2,
-	REPLACE: 3
+	NORMAL: 0,
+	INSERT: 1,
+	REPLACE: 2
 }
+
+var MODE_OBJECTS = [
+	NORMAL_MODE,
+	INSERT_MODE,
+	REPLACE_MODE
+]
 
 var mode = MODES.NORMAL
 var is_first_press_after_mode_switch = false;
@@ -44,86 +50,18 @@ function remove_char(index_y, index_x) {
 		text_storage[index_y].slice(index_x, text_storage[index_y].length)
 }
 
+function insert_char(char, index_y, index_x) {
+	text_storage[index_y] = text_storage[index_y].slice(0, index_x) + char 
+	+ text_storage[index_y].slice(index_x)
+}
+
 function switch_mode(mode_to_switch_to) {
 	mode = mode_to_switch_to
 	is_first_press_after_mode_switch = true
 }
 
 function keyPressed() {
-	if (mode == MODES.NORMAL) {
-		if (keyCode == LEFT_ARROW) { // move cursor
-			if (cursor_pos.x > 0) cursor_pos.x--
-		} else if (keyCode == RIGHT_ARROW) {
-			if (text_storage[cursor_pos.y][cursor_pos.x + 1] != undefined) cursor_pos.x++
-		} else if (keyCode == DOWN_ARROW) {
-			if (text_storage[cursor_pos.y + 1] != undefined) {
-				if (text_storage[cursor_pos.y + 1][cursor_pos.x] == undefined) {
-					cursor_pos.x = text_storage[cursor_pos.y + 1].length - 1
-					if (cursor_pos.x < 0) {
-						cursor_pos.x = 0
-					}
-				}
-				cursor_pos.y++
-			}
-		} else if (keyCode == UP_ARROW) {
-			if (cursor_pos.y > 0) {
-				if (text_storage[cursor_pos.y - 1][cursor_pos.x] == undefined) {
-					cursor_pos.x = text_storage[cursor_pos.y - 1].length - 1
-					if (cursor_pos.x < 0) {
-						cursor_pos.x = 0
-					}
-				}
-
-				cursor_pos.y--
-			}
-		}
-
-		else if (key === 'i') { // set modes
-			switch_mode(MODES.INSERT)
-		} else if (key === 'r') { // set modes
-			switch_mode(MODES.REPLACE)
-		}
-	} else if (mode == MODES.INSERT) {
-		if (keyCode == ESCAPE) { // change mode back to normal
-			switch_mode(MODES.NORMAL)
-			if (text_storage[cursor_pos.y][cursor_pos.x] == undefined) cursor_pos.x = text_storage[cursor_pos.y].length - 1
-		}
-
-		if (keyCode == LEFT_ARROW) { // move cursor
-			if (cursor_pos.x > 0) cursor_pos.x--
-		} else if (keyCode == RIGHT_ARROW) {
-			if (text_storage[cursor_pos.y][cursor_pos.x] != undefined) cursor_pos.x++
-		} else if (keyCode == DOWN_ARROW) {
-			if (text_storage[cursor_pos.y + 1] != undefined) {
-				if (text_storage[cursor_pos.y + 1][cursor_pos.x] == undefined) cursor_pos.x = text_storage[cursor_pos.y + 1].length
-				cursor_pos.y++
-			}
-		} else if (keyCode == UP_ARROW) {
-			if (cursor_pos.y > 0) {
-				if (text_storage[cursor_pos.y - 1][cursor_pos.x] == undefined) cursor_pos.x = text_storage[cursor_pos.y - 1].length
-				cursor_pos.y--
-			}
-		} else if (keyCode == BACKSPACE) { // delete char
-			if (cursor_pos.x > 0) {
-				remove_char(cursor_pos.y, cursor_pos.x)
-				cursor_pos.x--
-			} else if (cursor_pos.y > 0) {
-				cursor_pos.x = text_storage[cursor_pos.y - 1].length // remove line break
-				text_storage[cursor_pos.y - 1] += text_storage[cursor_pos.y]
-				text_storage.splice(cursor_pos.y, 1)
-				cursor_pos.y--
-			}
-		} else if (keyCode == ENTER) { // new line break
-			text_storage.splice(cursor_pos.y + 1, 0, text_storage[cursor_pos.y].substring(cursor_pos.x))
-			text_storage[cursor_pos.y] = text_storage[cursor_pos.y].substring(0, cursor_pos.x)
-			cursor_pos.y++
-			cursor_pos.x = 0
-		}
-	} else if (mode == MODES.REPLACE) {
-		if (keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW || keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == ESCAPE) {
-			switch_mode(MODES.NORMAL)
-		}
-	}
+	MODE_OBJECTS[mode].keyPressed()
 }
 
 function keyTyped() { // using different function for text input, bc it does not react to special keys
@@ -132,16 +70,9 @@ function keyTyped() { // using different function for text input, bc it does not
 		return
 	}
 	
-	if (key == "Enter") return
-
-	if (mode == MODES.INSERT) {
-		insert_char(key, cursor_pos.y, cursor_pos.x)
-		cursor_pos.x++
-	} else if (mode == MODES.REPLACE) {
-		remove_char(cursor_pos.y, cursor_pos.x + 1)
-		insert_char(key, cursor_pos.y, cursor_pos.x)
-		switch_mode(MODES.NORMAL)
-	}
+	if (key == "Enter") return // Enter is already covered in "keyPressed"
+	
+	MODE_OBJECTS[mode].keyTyped()
 }
 
 function mousePressed() {
@@ -160,13 +91,23 @@ function mousePressed() {
 			if (mouseX < textWidth(text_storage[clicked_y].substring(0, i )) + text_size) clicked_x = i - 1
 		}
 	}
-	if(mode == MODES.NORMAL) {
-		cursor_pos.y = clicked_y
-		cursor_pos.x = (clicked_x == -1) ? text_storage[clicked_y].length - 1 : clicked_x
-	} else if(mode == MODES.INSERT) {
-		cursor_pos.y = clicked_y
-		cursor_pos.x = (clicked_x == -1) ? text_storage[clicked_y].length : clicked_x
-	} else if (mode == MODES.REPLACE) {
-		switch_mode(MODES.NORMAL)
-	} 
+
+	MODE_OBJECTS[mode].mousePressed(clicked_x, clicked_y)
+}
+
+function render_text() {
+	fill(255)
+	for (var i in text_storage) {
+		text(text_storage[i], text_size, i * text_size + text_size)
+	}
+}
+
+function render_cursor() {
+	MODE_OBJECTS[mode].render_cursor()
+}
+
+function render_mode() {
+	var mode_text ="Mode: " + MODE_OBJECTS[mode].modeText
+	fill(170)
+	text(mode_text, windowWidth - textWidth(mode_text) - textWidth("A"), windowHeight - textAscent(mode_text))
 }
