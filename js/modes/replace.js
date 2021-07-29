@@ -8,8 +8,8 @@ var REPLACE_MODE = {
 	},
 
 	keyTyped: function() {
-		remove_char(cursor_pos.y, cursor_pos.x + 1)
-		insert_char(key, cursor_pos.y, cursor_pos.x)
+		remove_char_rendered(cursor_pos.y, cursor_pos.x + 1)
+		insert_char_rendered(key, cursor_pos.y, cursor_pos.x)
 		switch_mode(MODES.NORMAL)
 	},
 
@@ -19,9 +19,9 @@ var REPLACE_MODE = {
 
 	render_cursor: function () {
 		if (cursor_pos.x > 0) {
-		rect(textWidth(text_storage[cursor_pos.y].substring(0, cursor_pos.x)) + text_size, 
+		rect(textWidth(rendered_text_storage[cursor_pos.y].substring(0, cursor_pos.x)) + text_size, 
 			cursor_pos.y * text_size + 1.1 * text_size,
-			textWidth(text_storage[cursor_pos.y][cursor_pos.x]), 0.1 * text_size)
+			textWidth(rendered_text_storage[cursor_pos.y][cursor_pos.x]), 0.1 * text_size)
 		} else {
 			rect(text_size,
 			cursor_pos.y * text_size + 1.1 * text_size,

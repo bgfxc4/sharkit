@@ -27,6 +27,7 @@ var text_storage = [
 ]
 
 var rendered_text_storage = []
+var rendered_text_storage_line = [] // mapping to the real line the rendered line is corresponding to
 var rts_idx = 0
 
 function setup() {
@@ -53,14 +54,41 @@ function remove_char(index_y, index_x) {
 		text_storage[index_y].slice(index_x, text_storage[index_y].length)
 }
 
+function remove_char_rendered(index_y, index_x) {
+	var real_pos = rendered_to_real_pos(index_x, index_y)
+	remove_char(real_pos.y, real_pos.x)
+}
+
 function insert_char(char, index_y, index_x) {
 	text_storage[index_y] = text_storage[index_y].slice(0, index_x) + char 
 	+ text_storage[index_y].slice(index_x)
 }
 
+function insert_char_rendered(key, index_y, index_x) {
+	var real_pos = rendered_to_real_pos(index_x, index_y)
+	insert_char(key, real_pos.y, real_pos.x)
+}
+
 function switch_mode(mode_to_switch_to) {
 	mode = mode_to_switch_to
 	is_first_press_after_mode_switch = true
+}
+
+function rendered_to_real_pos(x, y) {
+	var real_pos = {
+		x: 0,
+		y: rendered_text_storage_line[y] - 0
+	}
+	
+	for (var i = y - 1; i >= 0; i --) {
+		if (rendered_text_storage_line[i] == real_pos.y) {
+			real_pos.x += rendered_text_storage[i].length
+		} else {
+			break
+		}
+	}
+	real_pos.x += x
+	return real_pos
 }
 
 function open_file() {
@@ -109,16 +137,16 @@ function mousePressed() {
 	var clicked_y = -1
 	var clicked_x = -1
 
-	for (var i = text_storage.length; i > 0; i--) {
+	for (var i = rendered_text_storage.length; i > 0; i--) {
 		if (mouseY < i * text_size) clicked_y = i - 1
 	}
 	
 	if (clicked_y == -1) {
-		clicked_y = text_storage.length - 1
-		clicked_x = text_storage[clicked_y].length - 1
+		clicked_y = rendered_text_storage.length - 1
+		clicked_x = rendered_text_storage[clicked_y].length - 1
 	} else {
-		for (var i = text_storage[clicked_y].length + 1; i >= 0; i--) {
-			if (mouseX < textWidth(text_storage[clicked_y].substring(0, i )) + text_size) clicked_x = i - 1
+		for (var i = rendered_text_storage[clicked_y].length + 1; i >= 0; i--) {
+			if (mouseX < textWidth(rendered_text_storage[clicked_y].substring(0, i )) + text_size) clicked_x = i - 1
 		}
 	}
 
@@ -128,13 +156,15 @@ function mousePressed() {
 function render_text() {
 	fill(255)
 	rendered_text_storage = []
+	rendered_text_storage_line = []
 	rts_idx = 0
 
 	for (var i in text_storage) {
 		if (textWidth(text_storage[i]) + text_size > windowWidth) {
-			render_text_too_long(text_storage[i])
+			render_text_too_long(text_storage[i], i)
 		} else {
-			rendered_text_storage[rts_idx++] = text_storage[i]
+			rendered_text_storage[rts_idx] = text_storage[i]
+			rendered_text_storage_line[rts_idx++] = i
 		}
 	}
 	for (var i in rendered_text_storage) {
@@ -142,19 +172,21 @@ function render_text() {
 	}
 }
 
-function render_text_too_long(to_render) {
+function render_text_too_long(to_render, i) {
 	fill(255)
 	var s = ""
 	while (textWidth(to_render) + text_size > windowWidth) {
 		s = to_render.slice(-1) + s
 		to_render = to_render.slice(0, -1)
 	}
-	rendered_text_storage[rts_idx++] = to_render
+	rendered_text_storage[rts_idx] = to_render
+	rendered_text_storage_line[rts_idx++] = i
 
 	if(textWidth(s) + text_size > windowWidth) {
-		render_text_too_long(s)
+		render_text_too_long(s, i)
 	} else {
-		rendered_text_storage[rts_idx++] = s
+		rendered_text_storage[rts_idx] = s
+		rendered_text_storage_line[rts_idx++] = i
 	}
 }
 
