@@ -26,6 +26,9 @@ var text_storage = [
 	"asdasd"
 ]
 
+var rendered_text_storage = []
+var rts_idx = 0
+
 function setup() {
 	createCanvas(windowWidth, windowHeight)
 	frameRate(60)
@@ -58,6 +61,33 @@ function insert_char(char, index_y, index_x) {
 function switch_mode(mode_to_switch_to) {
 	mode = mode_to_switch_to
 	is_first_press_after_mode_switch = true
+}
+
+function open_file() {
+	var i = document.createElement("input")
+	i.setAttribute("type", "file")
+	i.addEventListener('change', read_file, false)
+	i.click()
+}
+
+function read_file(e) {
+	var file = e.target.files[0];
+	if (!file) {
+		return;
+	}
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var contents = e.target.result;
+		console.log(contents)
+		parse_file_into_text_storage(contents)
+	};
+	reader.readAsText(file);
+}
+
+function parse_file_into_text_storage(contents) {
+	cursor_pos.x = 0
+	cursor_pos.y = 0
+	text_storage = contents.split('\n')
 }
 
 function keyPressed() {
@@ -97,8 +127,34 @@ function mousePressed() {
 
 function render_text() {
 	fill(255)
+	rendered_text_storage = []
+	rts_idx = 0
+
 	for (var i in text_storage) {
-		text(text_storage[i], text_size, i * text_size + text_size)
+		if (textWidth(text_storage[i]) + text_size > windowWidth) {
+			render_text_too_long(text_storage[i])
+		} else {
+			rendered_text_storage[rts_idx++] = text_storage[i]
+		}
+	}
+	for (var i in rendered_text_storage) {
+		text(rendered_text_storage[i], text_size, (i - (-1)) * text_size)
+	}
+}
+
+function render_text_too_long(to_render) {
+	fill(255)
+	var s = ""
+	while (textWidth(to_render) + text_size > windowWidth) {
+		s = to_render.slice(-1) + s
+		to_render = to_render.slice(0, -1)
+	}
+	rendered_text_storage[rts_idx++] = to_render
+
+	if(textWidth(s) + text_size > windowWidth) {
+		render_text_too_long(s)
+	} else {
+		rendered_text_storage[rts_idx++] = s
 	}
 }
 
