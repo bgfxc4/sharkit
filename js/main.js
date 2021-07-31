@@ -30,6 +30,8 @@ var rendered_text_storage = []
 var rendered_text_storage_line = [] // mapping to the real line the rendered line is corresponding to
 var rts_idx = 0
 
+var left_bar_size = text_size * 2
+
 function setup() {
 	createCanvas(windowWidth, windowHeight)
 	frameRate(60)
@@ -44,6 +46,7 @@ function draw() {
 	textSize(text_size)
 	textFont("monospace")
 	
+	render_line_numbers()
 	render_text()
 	render_cursor()
 	render_mode()
@@ -79,7 +82,11 @@ function rendered_to_real_pos(x, y) {
 		x: 0,
 		y: rendered_text_storage_line[y] - 0
 	}
-	
+
+	if (Number.isNaN(real_pos.y)) {
+		real_pos.y = rendered_text_storage_line[y-1] - 0
+	}
+
 	for (var i = y - 1; i >= 0; i --) {
 		if (rendered_text_storage_line[i] == real_pos.y) {
 			real_pos.x += rendered_text_storage[i].length
@@ -146,7 +153,7 @@ function mousePressed() {
 		clicked_x = rendered_text_storage[clicked_y].length - 1
 	} else {
 		for (var i = rendered_text_storage[clicked_y].length + 1; i >= 0; i--) {
-			if (mouseX < textWidth(rendered_text_storage[clicked_y].substring(0, i )) + text_size) clicked_x = i - 1
+			if (mouseX < textWidth(rendered_text_storage[clicked_y].substring(0, i )) + left_bar_size) clicked_x = i - 1
 		}
 	}
 
@@ -160,33 +167,49 @@ function render_text() {
 	rts_idx = 0
 
 	for (var i in text_storage) {
-		if (textWidth(text_storage[i]) + text_size > windowWidth) {
+		if (textWidth(text_storage[i]) + left_bar_size > windowWidth) {
 			render_text_too_long(text_storage[i], i)
 		} else {
 			rendered_text_storage[rts_idx] = text_storage[i]
 			rendered_text_storage_line[rts_idx++] = i
 		}
 	}
+
+	if (rendered_text_storage[cursor_pos.y] == undefined) {
+		rendered_text_storage[cursor_pos.y] = ""
+		rendered_text_storage_line[cursor_pos.y] = text_storage.length - 1
+	}
+
 	for (var i in rendered_text_storage) {
-		text(rendered_text_storage[i], text_size, (i - (-1)) * text_size)
+		text(rendered_text_storage[i], left_bar_size, (i - (-1)) * text_size)
 	}
 }
 
 function render_text_too_long(to_render, i) {
 	fill(255)
 	var s = ""
-	while (textWidth(to_render) + text_size > windowWidth) {
+	while (textWidth(to_render) + left_bar_size > windowWidth) {
 		s = to_render.slice(-1) + s
 		to_render = to_render.slice(0, -1)
 	}
 	rendered_text_storage[rts_idx] = to_render
 	rendered_text_storage_line[rts_idx++] = i
 
-	if(textWidth(s) + text_size > windowWidth) {
+	if(textWidth(s) + left_bar_size > windowWidth) {
 		render_text_too_long(s, i)
 	} else {
 		rendered_text_storage[rts_idx] = s
 		rendered_text_storage_line[rts_idx++] = i
+	}
+}
+
+function render_line_numbers() {
+	left_bar_size = textWidth("" + (rendered_text_storage.length)) + (text_size / 3)
+	fill(150)
+	for (var i in rendered_text_storage_line) {
+		if (rendered_text_storage_line[i] != rendered_text_storage_line[i - 1]) {
+			text((rendered_text_storage_line[i] - (-1)), left_bar_size - text_size / 4 - textWidth(rendered_text_storage_line[i] - (-1)), (i - (-1)) * text_size)
+		}
 	}
 }
 

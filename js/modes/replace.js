@@ -19,11 +19,11 @@ var REPLACE_MODE = {
 
 	render_cursor: function () {
 		if (cursor_pos.x > 0) {
-		rect(textWidth(rendered_text_storage[cursor_pos.y].substring(0, cursor_pos.x)) + text_size, 
+		rect(textWidth(rendered_text_storage[cursor_pos.y].substring(0, cursor_pos.x)) + left_bar_size, 
 			cursor_pos.y * text_size + 1.1 * text_size,
 			textWidth(rendered_text_storage[cursor_pos.y][cursor_pos.x]), 0.1 * text_size)
 		} else {
-			rect(text_size,
+			rect(left_bar_size,
 			cursor_pos.y * text_size + 1.1 * text_size,
 			textWidth("A"), 0.1 * text_size)
 		}
