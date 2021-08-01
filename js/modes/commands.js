@@ -7,6 +7,10 @@ var COMMAND_MODE = {
 		open: function() { 
 			open_file() 
 			switch_mode(MODES.NORMAL)
+		},
+		save: function() {
+			save_file()
+			switch_mode(MODES.NORMAL)
 		}
 	},
 
@@ -15,9 +19,15 @@ var COMMAND_MODE = {
 			switch_mode(MODES.NORMAL)
 			this.command = ""
 		} else if (keyCode == BACKSPACE) {
+			if (this.command == "") {
+				switch_mode(MODES.NORMAL)
+				return 
+			}
 			this.command = this.command.slice(0, -1)
 		} else if (keyCode == ENTER) {
 			if (this.commandList[this.command] == undefined) {
+				this.command = ""
+				switch_mode(MODES.NORMAL)
 				return
 			}
 			this.commandList[this.command]()
