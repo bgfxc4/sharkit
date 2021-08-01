@@ -8,13 +8,15 @@ var cursor_pos = {
 const MODES = {
 	NORMAL: 0,
 	INSERT: 1,
-	REPLACE: 2
+	REPLACE: 2,
+	COMMAND: 3
 }
 
 var MODE_OBJECTS = [
 	NORMAL_MODE,
 	INSERT_MODE,
-	REPLACE_MODE
+	REPLACE_MODE,
+	COMMAND_MODE
 ]
 
 var mode = MODES.NORMAL
