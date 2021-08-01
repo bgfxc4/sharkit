@@ -5,27 +5,32 @@ var NORMAL_MODE = {
 		if (keyCode == LEFT_ARROW) { // move cursor
 			if (cursor_pos.x > 0) cursor_pos.x--
 		} else if (keyCode == RIGHT_ARROW) {
-			if (rendered_text_storage[cursor_pos.y][cursor_pos.x + 1] != undefined) cursor_pos.x++
+			if (rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x + 1] != undefined) cursor_pos.x++
 		} else if (keyCode == DOWN_ARROW) {
-			if (rendered_text_storage[cursor_pos.y + 1] != undefined) {
-				if (rendered_text_storage[cursor_pos.y + 1][cursor_pos.x] == undefined) {
-					cursor_pos.x = rendered_text_storage[cursor_pos.y + 1].length - 1
+			if (rendered_text_storage[cursor_pos.y + scroll_offset + 1] != undefined) {
+				if (rendered_text_storage[cursor_pos.y + scroll_offset + 1][cursor_pos.x] == undefined) {
+					cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset + 1].length - 1
 					if (cursor_pos.x < 0) {
 						cursor_pos.x = 0
 					}
 				}
-				cursor_pos.y++
+				if (((cursor_pos.y + 2) * text_size) > windowHeight - textAscent("A")) {
+					scroll_down()
+				} else {
+					cursor_pos.y++
+				}
 			}
 		} else if (keyCode == UP_ARROW) {
 			if (cursor_pos.y > 0) {
-				if (rendered_text_storage[cursor_pos.y - 1][cursor_pos.x] == undefined) {
-					cursor_pos.x = rendered_text_storage[cursor_pos.y - 1].length - 1
+				if (rendered_text_storage[cursor_pos.y + scroll_offset - 1][cursor_pos.x] == undefined) {
+					cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset - 1].length - 1
 					if (cursor_pos.x < 0) {
 						cursor_pos.x = 0
 					}
 				}
-
 				cursor_pos.y--
+			} else if (scroll_offset > 0) {
+				scroll_up()
 			}
 		}
 
@@ -50,15 +55,15 @@ var NORMAL_MODE = {
 	render_cursor: function () {
 		fill(255)
 		if (cursor_pos.x > 0) {
-		rect(textWidth(rendered_text_storage[cursor_pos.y].substring(0, cursor_pos.x)) + left_bar_size, 
+		rect(textWidth(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, 
 			cursor_pos.y * text_size + 0.2 * text_size,
-			textWidth(rendered_text_storage[cursor_pos.y][cursor_pos.x]), text_size)
+			textWidth(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x]), text_size)
 		} else {
 			rect(left_bar_size,
 			cursor_pos.y * text_size + 0.2 * text_size,
 			textWidth("A"), text_size)
 		}
 		fill(0)
-		text(rendered_text_storage[cursor_pos.y][cursor_pos.x], textWidth(rendered_text_storage[cursor_pos.y].substring(0, cursor_pos.x)) + left_bar_size, cursor_pos.y * text_size + text_size)
+		text(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x], textWidth(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, cursor_pos.y * text_size + text_size)
 	},
 }

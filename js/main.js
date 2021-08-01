@@ -5,6 +5,8 @@ var cursor_pos = {
 	y: 0
 }
 
+var scroll_offset = 0
+
 const MODES = {
 	NORMAL: 0,
 	INSERT: 1,
@@ -121,9 +123,18 @@ function read_file(e) {
 	reader.readAsText(file);
 }
 
+function scroll_up() {
+	scroll_offset--
+}
+
+function scroll_down() {
+	scroll_offset++
+}
+
 function parse_file_into_text_storage(contents) {
 	cursor_pos.x = 0
 	cursor_pos.y = 0
+	scroll_offset = 0
 	text_storage = contents.split('\n')
 }
 
@@ -146,16 +157,16 @@ function mousePressed() {
 	var clicked_y = -1
 	var clicked_x = -1
 
-	for (var i = rendered_text_storage.length; i > 0; i--) {
+	for (var i = rendered_text_storage.length - scroll_offset; i > 0; i--) {
 		if (mouseY < i * text_size) clicked_y = i - 1
 	}
 	
 	if (clicked_y == -1) {
-		clicked_y = rendered_text_storage.length - 1
-		clicked_x = rendered_text_storage[clicked_y].length - 1
+		clicked_y = rendered_text_storage.length - 1 - scroll_offset
+		clicked_x = rendered_text_storage[clicked_y + scroll_offset].length - 1
 	} else {
-		for (var i = rendered_text_storage[clicked_y].length + 1; i >= 0; i--) {
-			if (mouseX < textWidth(rendered_text_storage[clicked_y].substring(0, i )) + left_bar_size) clicked_x = i - 1
+		for (var i = rendered_text_storage[clicked_y + scroll_offset].length + 1; i >= 0; i--) {
+			if (mouseX < textWidth(rendered_text_storage[clicked_y + scroll_offset].substring(0, i )) + left_bar_size) clicked_x = i - 1
 		}
 	}
 
@@ -177,13 +188,13 @@ function render_text() {
 		}
 	}
 
-	if (rendered_text_storage[cursor_pos.y] == undefined) {
-		rendered_text_storage[cursor_pos.y] = ""
-		rendered_text_storage_line[cursor_pos.y] = text_storage.length - 1
+	if (rendered_text_storage[cursor_pos.y + scroll_offset] == undefined) {
+		rendered_text_storage[cursor_pos.y + scroll_offset] = ""
+		rendered_text_storage_line[cursor_pos.y + scroll_offset] = text_storage.length - 1
 	}
 
-	for (var i in rendered_text_storage) {
-		text(rendered_text_storage[i], left_bar_size, (i - (-1)) * text_size)
+	for (var i = scroll_offset; i < rendered_text_storage.length && ((i - scroll_offset - (-1)) * text_size) < windowHeight - textAscent("A"); i++) {	
+		text(rendered_text_storage[i], left_bar_size, (i - scroll_offset - (-1)) * text_size)
 	}
 }
 
@@ -208,9 +219,9 @@ function render_text_too_long(to_render, i) {
 function render_line_numbers() {
 	left_bar_size = textWidth("" + (rendered_text_storage.length)) + (text_size / 3)
 	fill(150)
-	for (var i in rendered_text_storage_line) {
+	for (var i = scroll_offset; i < rendered_text_storage_line.length && ((i - scroll_offset - (-1)) * text_size) < windowHeight - textAscent("A"); i++) {
 		if (rendered_text_storage_line[i] != rendered_text_storage_line[i - 1]) {
-			text((rendered_text_storage_line[i] - (-1)), left_bar_size - text_size / 4 - textWidth(rendered_text_storage_line[i] - (-1)), (i - (-1)) * text_size)
+			text((rendered_text_storage_line[i] - (-1)), left_bar_size - text_size / 4 - textWidth(rendered_text_storage_line[i] - (-1)), (i - scroll_offset - (-1)) * text_size)
 		}
 	}
 }
