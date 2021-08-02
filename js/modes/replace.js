@@ -29,5 +29,7 @@ var REPLACE_MODE = {
 		}
 	},
 
-	mouseWheel: function (event) {},
+	mouseWheel: function (event) {
+		switch_mode(MODES.NORMAL)
+	},
 }
