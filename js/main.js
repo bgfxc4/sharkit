@@ -146,9 +146,20 @@ function save_file() {
 
 function scroll_up() {
 	scroll_offset--
+	if (((cursor_pos.y + 2) * text_size) <= windowHeight - textAscent("A")){
+		cursor_pos.y++
+	}
 }
 
 function scroll_down() {
+	if (scroll_offset >= rendered_text_storage.length - 1) {
+		return
+	}
+
+	if (cursor_pos.y > 0) {
+		cursor_pos.y--
+	}
+
 	scroll_offset++
 }
 

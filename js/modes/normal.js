@@ -7,31 +7,9 @@ var NORMAL_MODE = {
 		} else if (keyCode == RIGHT_ARROW) {
 			if (rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x + 1] != undefined) cursor_pos.x++
 		} else if (keyCode == DOWN_ARROW) {
-			if (rendered_text_storage[cursor_pos.y + scroll_offset + 1] != undefined) {
-				if (rendered_text_storage[cursor_pos.y + scroll_offset + 1][cursor_pos.x] == undefined) {
-					cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset + 1].length - 1
-					if (cursor_pos.x < 0) {
-						cursor_pos.x = 0
-					}
-				}
-				if (((cursor_pos.y + 2) * text_size) > windowHeight - textAscent("A")) {
-					scroll_down()
-				} else {
-					cursor_pos.y++
-				}
-			}
+			this.move_cursor_down()
 		} else if (keyCode == UP_ARROW) {
-			if (cursor_pos.y > 0) {
-				if (rendered_text_storage[cursor_pos.y + scroll_offset - 1][cursor_pos.x] == undefined) {
-					cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset - 1].length - 1
-					if (cursor_pos.x < 0) {
-						cursor_pos.x = 0
-					}
-				}
-				cursor_pos.y--
-			} else if (scroll_offset > 0) {
-				scroll_up()
-			}
+			this.move_cursor_up()
 		}
 
 		else if (key === 'i') { // set modes
@@ -71,7 +49,43 @@ var NORMAL_MODE = {
 		if (keyIsDown(CONTROL)) {
 			(event.delta <= 0)? text_size++ : text_size--
 		} else {
-			console.log("no")
+			if (scroll_offset < rendered_text_storage.length && event.delta > 0) {
+				scroll_down()
+			} else if (scroll_offset > 0 && event.delta < 0) {
+				scroll_up()
+			}
 		}
 	},
+
+
+	// own functions, not required
+	move_cursor_down: function() {
+		if (rendered_text_storage[cursor_pos.y + scroll_offset + 1] != undefined) {
+			if (rendered_text_storage[cursor_pos.y + scroll_offset + 1][cursor_pos.x] == undefined) {
+				cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset + 1].length - 1
+				if (cursor_pos.x < 0) {
+					cursor_pos.x = 0
+				}
+			}
+			if (((cursor_pos.y + 2) * text_size) > windowHeight - textAscent("A")) {
+				scroll_down()
+			} else {
+				cursor_pos.y++
+			}
+		}
+	},
+
+	move_cursor_up: function() {
+		if (cursor_pos.y > 0) {
+			if (rendered_text_storage[cursor_pos.y + scroll_offset - 1][cursor_pos.x] == undefined) {
+				cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset - 1].length - 1
+				if (cursor_pos.x < 0) {
+					cursor_pos.x = 0
+				}
+			}
+			cursor_pos.y--
+		} else if (scroll_offset > 0) {
+			scroll_up()
+		}
+	}
 }
