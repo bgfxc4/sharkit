@@ -31,6 +31,7 @@ var COMMAND_MODE = {
 				return
 			}
 			this.commandList[this.command]()
+			this.command = ""
 		}
 	},
 
