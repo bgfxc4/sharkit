@@ -174,6 +174,10 @@ function keyTyped() { // using different function for text input, bc it does not
 	MODE_OBJECTS[mode].keyTyped()
 }
 
+function mouseWheel(event) {
+	MODE_OBJECTS[mode].mouseWheel(event)
+}
+
 function mousePressed() {
 	var clicked_y = -1
 	var clicked_x = -1
@@ -256,3 +260,7 @@ function render_mode() {
 	fill(170)
 	text(mode_text, windowWidth - textWidth(mode_text) - textWidth("A"), windowHeight - textAscent(mode_text))
 }
+
+document.addEventListener("wheel", e => {
+	e.preventDefault()
+}, {passive: false})

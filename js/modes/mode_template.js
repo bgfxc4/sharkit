@@ -8,4 +8,6 @@ var COMMAND_MODE = {
 	mousePressed: function(clicked_x, clicked_y) {},
 
 	render_cursor: function () {},
+
+	mouseWheel: function (event) {},
 }

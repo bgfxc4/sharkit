@@ -87,4 +87,6 @@ var INSERT_MODE = {
 			cursor_pos.y * text_size + 0.2 * text_size,
 			2, text_size)
 	},
+
+	mouseWheel: function (event) {},
 }

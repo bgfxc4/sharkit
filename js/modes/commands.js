@@ -58,4 +58,6 @@ var COMMAND_MODE = {
 		fill(170) // render entered command
 		text(":" + this.command, textWidth(":"), windowHeight - textAscent(":"))
 	},
+
+	mouseWheel: function (event) {},
 }

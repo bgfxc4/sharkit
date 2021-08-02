@@ -28,4 +28,6 @@ var REPLACE_MODE = {
 			textWidth("A"), 0.1 * text_size)
 		}
 	},
+
+	mouseWheel: function (event) {},
 }

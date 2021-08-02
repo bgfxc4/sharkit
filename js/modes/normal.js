@@ -66,4 +66,12 @@ var NORMAL_MODE = {
 		fill(0)
 		text(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x], textWidth(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, cursor_pos.y * text_size + text_size)
 	},
+
+	mouseWheel: function (event) {
+		if (keyIsDown(CONTROL)) {
+			(event.delta <= 0)? text_size++ : text_size--
+		} else {
+			console.log("no")
+		}
+	},
 }
