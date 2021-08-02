@@ -149,6 +149,10 @@ function scroll_up() {
 	if (((cursor_pos.y + 2) * text_size) <= windowHeight - textAscent("A")){
 		cursor_pos.y++
 	}
+
+	if (rendered_text_storage[cursor_pos.y + scroll_offset].length >= cursor_pos.x) {
+		cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset].length - 1
+	}
 }
 
 function scroll_down() {
@@ -161,6 +165,10 @@ function scroll_down() {
 	}
 
 	scroll_offset++
+	
+	if (rendered_text_storage[cursor_pos.y + scroll_offset].length >= cursor_pos.x) {
+		cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset].length - 1
+	}
 }
 
 function parse_file_into_text_storage(contents) {
