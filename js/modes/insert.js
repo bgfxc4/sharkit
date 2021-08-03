@@ -50,6 +50,14 @@ var INSERT_MODE = {
 			} else {
 				cursor_pos.y++
 			}
+		} else if (keyCode == TAB) {
+			insert_char_rendered("\t", cursor_pos.y + scroll_offset, cursor_pos.x)
+			cursor_pos.x++
+			render_text()
+			if (cursor_pos.x > rendered_text_storage[cursor_pos.y + scroll_offset].length) {
+				cursor_pos.y ++;
+				cursor_pos.x = 1
+			}
 		}
 	},
 
@@ -70,7 +78,7 @@ var INSERT_MODE = {
 
 	render_cursor: function () {
 		fill(255)
-		rect(textWidth(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, 
+		rect(text_width_all(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, 
 			cursor_pos.y * text_size + 0.2 * text_size,
 			2, text_size)
 	},

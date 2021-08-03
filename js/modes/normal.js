@@ -33,16 +33,16 @@ var NORMAL_MODE = {
 	render_cursor: function () {
 		fill(255)
 		if (cursor_pos.x > 0) {
-		rect(textWidth(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, 
+		rect(text_width_all(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, 
 			cursor_pos.y * text_size + 0.2 * text_size,
-			textWidth(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x]), text_size)
+			text_width_all(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x]), text_size)
 		} else {
 			rect(left_bar_size,
 			cursor_pos.y * text_size + 0.2 * text_size,
-			textWidth("A"), text_size)
+			text_width_all("A"), text_size)
 		}
 		fill(0)
-		text(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x], textWidth(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, cursor_pos.y * text_size + text_size)
+		text(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x], text_width_all(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, cursor_pos.y * text_size + text_size)
 	},
 
 	mouseWheel: function (event) {

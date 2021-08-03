@@ -19,13 +19,13 @@ var REPLACE_MODE = {
 
 	render_cursor: function () {
 		if (cursor_pos.x > 0) {
-		rect(textWidth(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, 
+		rect(text_width_all(rendered_text_storage[cursor_pos.y + scroll_offset].substring(0, cursor_pos.x)) + left_bar_size, 
 			cursor_pos.y * text_size + 1.1 * text_size,
-			textWidth(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x]), 0.1 * text_size)
+			text_width_all(rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x]), 0.1 * text_size)
 		} else {
 			rect(left_bar_size,
 			cursor_pos.y * text_size + 1.1 * text_size,
-			textWidth("A"), 0.1 * text_size)
+			text_width_all("A"), 0.1 * text_size)
 		}
 	},
 

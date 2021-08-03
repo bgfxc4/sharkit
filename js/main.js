@@ -210,11 +210,20 @@ function mousePressed() {
 		clicked_x = rendered_text_storage[clicked_y + scroll_offset].length - 1
 	} else {
 		for (var i = rendered_text_storage[clicked_y + scroll_offset].length + 1; i >= 0; i--) {
-			if (mouseX < textWidth(rendered_text_storage[clicked_y + scroll_offset].substring(0, i )) + left_bar_size) clicked_x = i - 1
+			if (mouseX < text_width_all(rendered_text_storage[clicked_y + scroll_offset].substring(0, i )) + left_bar_size) clicked_x = i - 1
 		}
 	}
 
 	MODE_OBJECTS[mode].mousePressed(clicked_x, clicked_y)
+}
+
+function text_width_all(s) {
+	s += ""
+	if (s.includes("\t")) {
+		var count = (s.match(/\t/g) || []).length
+		return textWidth(s) - (count * textWidth("\t")) + 2 * count * textWidth(" ")
+	}
+	return textWidth(s)
 }
 
 function render_text() {
@@ -224,7 +233,7 @@ function render_text() {
 	rts_idx = 0
 
 	for (var i in text_storage) {
-		if (textWidth(text_storage[i]) + left_bar_size > windowWidth) {
+		if (text_width_all(text_storage[i]) + left_bar_size > windowWidth) {
 			render_text_too_long(text_storage[i], i)
 		} else {
 			rendered_text_storage[rts_idx] = text_storage[i]
@@ -245,14 +254,14 @@ function render_text() {
 function render_text_too_long(to_render, i) {
 	fill(255)
 	var s = ""
-	while (textWidth(to_render) + left_bar_size > windowWidth) {
+	while (text_width_all(to_render) + left_bar_size > windowWidth) {
 		s = to_render.slice(-1) + s
 		to_render = to_render.slice(0, -1)
 	}
 	rendered_text_storage[rts_idx] = to_render
 	rendered_text_storage_line[rts_idx++] = i
 
-	if(textWidth(s) + left_bar_size > windowWidth) {
+	if(text_width_all(s) + left_bar_size > windowWidth) {
 		render_text_too_long(s, i)
 	} else {
 		rendered_text_storage[rts_idx] = s
@@ -261,11 +270,11 @@ function render_text_too_long(to_render, i) {
 }
 
 function render_line_numbers() {
-	left_bar_size = textWidth("" + (rendered_text_storage.length)) + (text_size / 3)
+	left_bar_size = text_width_all("" + (rendered_text_storage.length)) + (text_size / 3)
 	fill(150)
 	for (var i = scroll_offset; i < rendered_text_storage_line.length && ((i - scroll_offset - (-1)) * text_size) < windowHeight - textAscent("A"); i++) {
 		if (rendered_text_storage_line[i] != rendered_text_storage_line[i - 1]) {
-			text((rendered_text_storage_line[i] - (-1)), left_bar_size - text_size / 4 - textWidth(rendered_text_storage_line[i] - (-1)), (i - scroll_offset - (-1)) * text_size)
+			text((rendered_text_storage_line[i] - (-1)), left_bar_size - text_size / 4 - text_width_all(rendered_text_storage_line[i] - (-1)), (i - scroll_offset - (-1)) * text_size)
 		}
 	}
 }
@@ -277,9 +286,15 @@ function render_cursor() {
 function render_mode() {
 	var mode_text ="Mode: " + MODE_OBJECTS[mode].modeText
 	fill(170)
-	text(mode_text, windowWidth - textWidth(mode_text) - textWidth("A"), windowHeight - textAscent(mode_text))
+	text(mode_text, windowWidth - text_width_all(mode_text) - text_width_all("A"), windowHeight - textAscent(mode_text))
 }
 
 document.addEventListener("wheel", e => {
 	e.preventDefault()
 }, {passive: false})
+
+document.addEventListener("keydown", e => {
+	if (e.key == "Tab") {
+		e.preventDefault()
+	}
+})
