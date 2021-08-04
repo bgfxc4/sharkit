@@ -10,4 +10,6 @@ var COMMAND_MODE = {
 	render_cursor: function () {},
 
 	mouseWheel: function (event) {},
+
+	draw: function() {},
 }

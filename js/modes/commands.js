@@ -60,4 +60,6 @@ var COMMAND_MODE = {
 	},
 
 	mouseWheel: function (event) {},
+
+	draw: function() {},
 }

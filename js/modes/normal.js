@@ -16,6 +16,8 @@ var NORMAL_MODE = {
 			switch_mode(MODES.INSERT)
 		} else if (key === 'r') { // set modes
 			switch_mode(MODES.REPLACE)
+		} else if (key === 'o' || key === 'O') {
+			switch_mode(MODES.OPEN_LINE)
 		} else if (key === ':') {
 			switch_mode(MODES.COMMAND)
 		}
@@ -56,6 +58,8 @@ var NORMAL_MODE = {
 			}
 		}
 	},
+
+	draw: function() {},
 
 
 	// own functions, not required

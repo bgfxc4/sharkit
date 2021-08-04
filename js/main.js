@@ -11,14 +11,16 @@ const MODES = {
 	NORMAL: 0,
 	INSERT: 1,
 	REPLACE: 2,
-	COMMAND: 3
+	COMMAND: 3,
+	OPEN_LINE: 4
 }
 
 var MODE_OBJECTS = [
 	NORMAL_MODE,
 	INSERT_MODE,
 	REPLACE_MODE,
-	COMMAND_MODE
+	COMMAND_MODE,
+	OPEN_LINE_MODE
 ]
 
 var mode = MODES.NORMAL
@@ -54,6 +56,8 @@ function draw() {
 	render_text()
 	render_cursor()
 	render_mode()
+
+	MODE_OBJECTS[mode].draw()
 }
 
 function remove_char(index_y, index_x) {

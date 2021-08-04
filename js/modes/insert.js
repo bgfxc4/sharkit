@@ -96,6 +96,8 @@ var INSERT_MODE = {
 		}
 	},
 
+	draw: function() {},
+
 
 	// own functions
 	move_cursor_down: function() {
