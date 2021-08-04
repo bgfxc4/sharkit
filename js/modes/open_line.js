@@ -12,18 +12,20 @@ var OPEN_LINE_MODE = {
 	mouseWheel: function (event) {},
 
 	draw: function() {
-		var real_pos = rendered_to_real_pos(cursor_pos.x, cursor_pos.y)
+		var real_pos = rendered_to_real_pos(cursor_pos.x, cursor_pos.y + scroll_offset)
 		if (keyIsDown(SHIFT)) {
 			text_storage.splice(real_pos.y, 0, "")
-			while (real_pos.y == rendered_to_real_pos(cursor_pos.x, cursor_pos.y - 1).y) {
+			render_text()
+			while (real_pos.y == rendered_to_real_pos(cursor_pos.x, cursor_pos.y - 1 + scroll_offset).y) {
 				cursor_pos.y--
 			}
 			cursor_pos.x = 0
 		} else {	
 			text_storage.splice(real_pos.y + 1, 0, "")	
-			do {
+			render_text()
+			while (real_pos.y == rendered_to_real_pos(cursor_pos.x, cursor_pos.y + scroll_offset).y) {
 				cursor_pos.y++
-			} while (real_pos.y == rendered_to_real_pos(cursor_pos.x, cursor_pos.y).y)
+			}
 			cursor_pos.x = 0
 		}
 		switch_mode(MODES.INSERT)

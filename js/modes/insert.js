@@ -89,9 +89,10 @@ var INSERT_MODE = {
 		} else {
 			if (scroll_offset < rendered_text_storage.length && event.delta > 0) {
 				scroll_down()
-				console.log(scroll_offset, rendered_text_storage.length)
+				if (scroll_offset < rendered_text_storage.length) scroll_down()
 			} else if (scroll_offset > 0 && event.delta < 0) {
 				scroll_up()
+				if (scroll_offset > 0) scroll_up()
 			}
 		}
 	},
