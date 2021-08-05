@@ -2,7 +2,7 @@ var COMMAND_MODE = {
 	modeText: "COMMAND",
 
 	trigger_keys: [':'],
-	
+
 	command: "",
 
 	keyPressed: function() {
@@ -57,7 +57,7 @@ var COMMAND_MODE = {
 
 	draw: function() {},
 
-	run: function(args) {},	
+	run: function(args) {},
 
 
 	// own functions

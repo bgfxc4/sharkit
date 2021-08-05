@@ -51,7 +51,7 @@ function draw() {
 	background(0)
 	textSize(text_size)
 	textFont("monospace")
-	
+
 	render_line_numbers()
 	render_text()
 	render_cursor()
@@ -135,7 +135,7 @@ function save_file(filename = "yourDocument.txt") {
 		window.navigator.msSaveOrOpenBlob(file, filename);
 	else { // Others
 		var a = document.createElement("a"),
-        url = URL.createObjectURL(file);
+		url = URL.createObjectURL(file);
 		a.href = url;
 		a.download = filename;
 		document.body.appendChild(a);
@@ -168,7 +168,7 @@ function scroll_down() {
 	}
 
 	scroll_offset++
-	
+
 	if (rendered_text_storage[cursor_pos.y + scroll_offset].length >= cursor_pos.x) {
 		cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset].length - 1
 	}
@@ -190,9 +190,9 @@ function keyTyped() { // using different function for text input, bc it does not
 		is_first_press_after_mode_switch = false
 		return
 	}
-	
+
 	if (key == "Enter") return // Enter is already covered in "keyPressed"
-	
+
 	MODE_OBJECTS[mode].keyTyped()
 }
 
@@ -207,7 +207,7 @@ function mousePressed() {
 	for (var i = rendered_text_storage.length - scroll_offset; i > 0; i--) {
 		if (mouseY < i * text_size) clicked_y = i - 1
 	}
-	
+
 	if (clicked_y == -1) {
 		clicked_y = rendered_text_storage.length - 1 - scroll_offset
 		clicked_x = rendered_text_storage[clicked_y + scroll_offset].length - 1
@@ -249,7 +249,7 @@ function render_text() {
 		rendered_text_storage_line[cursor_pos.y + scroll_offset] = text_storage.length - 1
 	}
 
-	for (var i = scroll_offset; i < rendered_text_storage.length && ((i - scroll_offset - (-1)) * text_size) < windowHeight - textAscent("A"); i++) {	
+	for (var i = scroll_offset; i < rendered_text_storage.length && ((i - scroll_offset - (-1)) * text_size) < windowHeight - textAscent("A"); i++) {
 		text(rendered_text_storage[i], left_bar_size, (i - scroll_offset - (-1)) * text_size)
 	}
 }

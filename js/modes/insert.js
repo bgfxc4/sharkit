@@ -5,7 +5,7 @@ var INSERT_MODE = {
 
 	keyPressed: function() {
 		var real_cursor_pos = rendered_to_real_pos(cursor_pos.x, cursor_pos.y + scroll_offset)
-		
+
 		if (keyCode == ESCAPE) { // change mode back to normal
 			switch_mode(MODES.NORMAL, [ESCAPE])
 			if (rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x] == undefined) cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset].length - 1
@@ -27,7 +27,7 @@ var INSERT_MODE = {
 				console.log(cursor_pos, real_cursor_pos)
 				text_storage[real_cursor_pos.y - 1] += text_storage[real_cursor_pos.y]
 				text_storage.splice(real_cursor_pos.y, 1)
-				
+
 				cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset - 1].length
 				if (cursor_pos.y <= 0) {
 					scroll_up()

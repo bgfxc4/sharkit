@@ -2,7 +2,7 @@ var NORMAL_MODE = {
 	modeText: "NORMAL",
 
 	trigger_keys: [],
-	
+
 	keyPressed: function() {
 		if (keyCode == LEFT_ARROW) { // move cursor
 			if (cursor_pos.x > 0) cursor_pos.x--

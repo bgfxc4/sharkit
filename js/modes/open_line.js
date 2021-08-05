@@ -24,8 +24,8 @@ var OPEN_LINE_MODE = {
 				cursor_pos.y--
 			}
 			cursor_pos.x = 0
-		} else {	
-			text_storage.splice(real_pos.y + 1, 0, "")	
+		} else {
+			text_storage.splice(real_pos.y + 1, 0, "")
 			render_text()
 			while (real_pos.y == rendered_to_real_pos(cursor_pos.x, cursor_pos.y + scroll_offset).y) {
 				cursor_pos.y++
