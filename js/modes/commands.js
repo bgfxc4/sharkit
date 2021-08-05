@@ -4,6 +4,10 @@ var COMMAND_MODE = {
 	trigger_keys: [':'],
 
 	command: "",
+	message: {
+		col: undefined,
+		text: ""
+	},
 
 	keyPressed: function() {
 		if (keyCode == ESCAPE) { // change mode back to normal
@@ -21,7 +25,8 @@ var COMMAND_MODE = {
 			})
 			if (this.commandList[splitted[0]] == undefined) {
 				this.command = ""
-				switch_mode(MODES.NORMAL, [""])
+				this.message.col = color(255, 40, 40)
+				this.message.text = `The command "${splitted[0]}" does not exist!`
 				return
 			}
 			this.commandList[splitted[0]](splitted)
@@ -31,6 +36,7 @@ var COMMAND_MODE = {
 
 	keyTyped: function() {
 		this.command += key
+		this.message.text = ""
 	},
 
 	mousePressed: function(clicked_x, clicked_y) {},
@@ -51,13 +57,19 @@ var COMMAND_MODE = {
 
 		fill(170) // render entered command
 		text(":" + this.command, text_width_all(":"), windowHeight - textAscent(":"))
+		if (this.command == "") {
+			fill(this.message.col)
+			text(this.message.text, 2 * text_width_all(":"), windowHeight - textAscent(":"))
+		}
 	},
 
 	mouseWheel: function (event) {},
 
 	draw: function() {},
 
-	run: function(args) {},
+	run: function(args) {
+		this.message.col = color(255)
+	},
 
 
 	// own functions
