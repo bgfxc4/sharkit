@@ -13,7 +13,9 @@ var OPEN_LINE_MODE = {
 
 	mouseWheel: function (event) {},
 
-	draw: function() {
+	draw: function() {},
+
+	run: function(args) {
 		var real_pos = rendered_to_real_pos(cursor_pos.x, cursor_pos.y + scroll_offset)
 		if (keyIsDown(SHIFT)) {
 			text_storage.splice(real_pos.y, 0, "")
@@ -32,6 +34,4 @@ var OPEN_LINE_MODE = {
 		}
 		switch_mode(MODES.INSERT, [""])
 	},
-
-	run: function(args) {},
 }
