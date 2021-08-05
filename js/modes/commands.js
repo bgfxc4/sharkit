@@ -13,7 +13,9 @@ var COMMAND_MODE = {
 		if (keyCode == ESCAPE) { // change mode back to normal
 			switch_mode(MODES.NORMAL, [ESCAPE])
 			this.command = ""
+			this.message.text = ""
 		} else if (keyCode == BACKSPACE) {
+			this.message.text = ""
 			if (this.command == "") {
 				switch_mode(MODES.NORMAL, [BACKSPACE])
 				return 
