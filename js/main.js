@@ -128,10 +128,8 @@ function read_file(e) {
 	reader.readAsText(file);
 }
 
-function save_file() {
+function save_file(filename = "yourDocument.txt") {
 	var data = text_storage.join('\n')
-	var filename = "yourDocument.txt"
-
 	var file = new Blob([data], {type: "text"});
 	if (window.navigator.msSaveOrOpenBlob) // IE10+
 		window.navigator.msSaveOrOpenBlob(file, filename);

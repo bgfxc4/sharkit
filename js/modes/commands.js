@@ -5,17 +5,6 @@ var COMMAND_MODE = {
 	
 	command: "",
 
-	commandList: {
-		open: function() { 
-			open_file() 
-			switch_mode(MODES.NORMAL, [""])
-		},
-		save: function() {
-			save_file()
-			switch_mode(MODES.NORMAL, [""])
-		}
-	},
-
 	keyPressed: function() {
 		if (keyCode == ESCAPE) { // change mode back to normal
 			switch_mode(MODES.NORMAL, [ESCAPE])
@@ -27,12 +16,15 @@ var COMMAND_MODE = {
 			}
 			this.command = this.command.slice(0, -1)
 		} else if (keyCode == ENTER) {
-			if (this.commandList[this.command] == undefined) {
+			var splitted = this.command.split(" ").filter(a => {
+				return a != ""
+			})
+			if (this.commandList[splitted[0]] == undefined) {
 				this.command = ""
 				switch_mode(MODES.NORMAL, [""])
 				return
 			}
-			this.commandList[this.command]()
+			this.commandList[splitted[0]](splitted)
 			this.command = ""
 		}
 	},
@@ -65,5 +57,22 @@ var COMMAND_MODE = {
 
 	draw: function() {},
 
-	run: function(args) {},
+	run: function(args) {},	
+
+
+	// own functions
+	commandList: {
+		open: function(args) { 
+			open_file() 
+			switch_mode(MODES.NORMAL, [""])
+		},
+		save: function(args) {
+			if (args[1] != undefined) { // only supports filenames without spaces, dont use spaces in your filenames
+				save_file(args[1])
+			} else {
+				save_file()
+			}
+			switch_mode(MODES.NORMAL, [""])
+		}
+	},
 }
