@@ -1,5 +1,7 @@
 var REPLACE_MODE = {
 	modeText: "REPLACE",
+
+	trigger_keys: ['r'],
 	
 	keyPressed: function() {
 		if (keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW || keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == ESCAPE) {

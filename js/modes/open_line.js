@@ -1,5 +1,7 @@
 var OPEN_LINE_MODE = {
 	modeText: "OPEN LINE",
+
+	trigger_keys: ['o', 'O'],
 	
 	keyPressed: function() {},
 

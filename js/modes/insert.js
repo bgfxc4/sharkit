@@ -1,6 +1,8 @@
 var INSERT_MODE = {
 	modeText: "INSERT",
 
+	trigger_keys: ['i'],
+
 	keyPressed: function() {
 		var real_cursor_pos = rendered_to_real_pos(cursor_pos.x, cursor_pos.y + scroll_offset)
 		

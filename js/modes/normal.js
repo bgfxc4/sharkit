@@ -1,5 +1,7 @@
 var NORMAL_MODE = {
 	modeText: "NORMAL",
+
+	trigger_keys: [],
 	
 	keyPressed: function() {
 		if (keyCode == LEFT_ARROW) { // move cursor
@@ -12,14 +14,13 @@ var NORMAL_MODE = {
 			this.move_cursor_up()
 		}
 
-		else if (key === 'i') { // set modes
-			switch_mode(MODES.INSERT)
-		} else if (key === 'r') { // set modes
-			switch_mode(MODES.REPLACE)
-		} else if (key === 'o' || key === 'O') {
-			switch_mode(MODES.OPEN_LINE)
-		} else if (key === ':') {
-			switch_mode(MODES.COMMAND)
+		for (var mode_val of Object.values(MODES)) {
+			for (var c of MODE_OBJECTS[mode_val].trigger_keys) {
+				if (key === c) {
+					switch_mode(mode_val)
+					return
+				}
+			}
 		}
 	},
 

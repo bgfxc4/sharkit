@@ -1,5 +1,7 @@
 var COMMAND_MODE = {
 	modeText: "COMMAND",
+
+	trigger_keys: [':'],
 	
 	command: "",
 

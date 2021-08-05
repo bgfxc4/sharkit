@@ -1,6 +1,8 @@
 var COMMAND_MODE = {
 	modeText: "",
-	
+
+	trigger_keys: [],
+
 	keyPressed: function() {},
 
 	keyTyped: function() {},
