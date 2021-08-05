@@ -80,9 +80,10 @@ function insert_char_rendered(key, index_y, index_x) {
 	insert_char(key, real_pos.y, real_pos.x)
 }
 
-function switch_mode(mode_to_switch_to) {
+function switch_mode(mode_to_switch_to, args = []) { // args[0] is the key that triggered the mode switch. if none, then ""
 	mode = mode_to_switch_to
 	is_first_press_after_mode_switch = true
+	MODE_OBJECTS[mode].run(args)
 }
 
 function rendered_to_real_pos(x, y) {

@@ -17,7 +17,7 @@ var NORMAL_MODE = {
 		for (var mode_val of Object.values(MODES)) {
 			for (var c of MODE_OBJECTS[mode_val].trigger_keys) {
 				if (key === c) {
-					switch_mode(mode_val)
+					switch_mode(mode_val, [c])
 					return
 				}
 			}
@@ -63,6 +63,8 @@ var NORMAL_MODE = {
 	},
 
 	draw: function() {},
+
+	run: function(args) {},
 
 
 	// own functions, not required

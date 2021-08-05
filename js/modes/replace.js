@@ -5,18 +5,18 @@ var REPLACE_MODE = {
 	
 	keyPressed: function() {
 		if (keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW || keyCode == UP_ARROW || keyCode == DOWN_ARROW || keyCode == ESCAPE) {
-			switch_mode(MODES.NORMAL)
+			switch_mode(MODES.NORMAL, [keyCode])
 		}
 	},
 
 	keyTyped: function() {
 		remove_char_rendered(cursor_pos.y + scroll_offset, cursor_pos.x + 1)
 		insert_char_rendered(key, cursor_pos.y + scroll_offset, cursor_pos.x)
-		switch_mode(MODES.NORMAL)
+		switch_mode(MODES.NORMAL, [""])
 	},
 
 	mousePressed: function(clicked_x, clicked_y) {
-		switch_mode(MODES.NORMAL)
+		switch_mode(MODES.NORMAL, [""])
 	},
 
 	render_cursor: function () {
@@ -32,8 +32,10 @@ var REPLACE_MODE = {
 	},
 
 	mouseWheel: function (event) {
-		switch_mode(MODES.NORMAL)
+		switch_mode(MODES.NORMAL, [""])
 	},
 
 	draw: function() {},
+
+	run: function(args) {},
 }

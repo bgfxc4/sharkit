@@ -8,28 +8,28 @@ var COMMAND_MODE = {
 	commandList: {
 		open: function() { 
 			open_file() 
-			switch_mode(MODES.NORMAL)
+			switch_mode(MODES.NORMAL, [""])
 		},
 		save: function() {
 			save_file()
-			switch_mode(MODES.NORMAL)
+			switch_mode(MODES.NORMAL, [""])
 		}
 	},
 
 	keyPressed: function() {
 		if (keyCode == ESCAPE) { // change mode back to normal
-			switch_mode(MODES.NORMAL)
+			switch_mode(MODES.NORMAL, [ESCAPE])
 			this.command = ""
 		} else if (keyCode == BACKSPACE) {
 			if (this.command == "") {
-				switch_mode(MODES.NORMAL)
+				switch_mode(MODES.NORMAL, [BACKSPACE])
 				return 
 			}
 			this.command = this.command.slice(0, -1)
 		} else if (keyCode == ENTER) {
 			if (this.commandList[this.command] == undefined) {
 				this.command = ""
-				switch_mode(MODES.NORMAL)
+				switch_mode(MODES.NORMAL, [""])
 				return
 			}
 			this.commandList[this.command]()
@@ -64,4 +64,6 @@ var COMMAND_MODE = {
 	mouseWheel: function (event) {},
 
 	draw: function() {},
+
+	run: function(args) {},
 }

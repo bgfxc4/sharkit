@@ -7,7 +7,7 @@ var INSERT_MODE = {
 		var real_cursor_pos = rendered_to_real_pos(cursor_pos.x, cursor_pos.y + scroll_offset)
 		
 		if (keyCode == ESCAPE) { // change mode back to normal
-			switch_mode(MODES.NORMAL)
+			switch_mode(MODES.NORMAL, [ESCAPE])
 			if (rendered_text_storage[cursor_pos.y + scroll_offset][cursor_pos.x] == undefined) cursor_pos.x = rendered_text_storage[cursor_pos.y + scroll_offset].length - 1
 		}
 
@@ -100,6 +100,8 @@ var INSERT_MODE = {
 	},
 
 	draw: function() {},
+
+	run: function(args) {},
 
 
 	// own functions

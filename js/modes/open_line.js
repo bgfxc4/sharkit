@@ -30,6 +30,8 @@ var OPEN_LINE_MODE = {
 			}
 			cursor_pos.x = 0
 		}
-		switch_mode(MODES.INSERT)
+		switch_mode(MODES.INSERT, [""])
 	},
+
+	run: function(args) {},
 }
