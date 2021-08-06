@@ -57,7 +57,7 @@ function draw() {
 	render_cursor()
 	render_mode()
 	
-	if (typeof(MODE_OBJECTS[mode].draw == 'function'))
+	if (typeof(MODE_OBJECTS[mode].draw) == 'function')
 		MODE_OBJECTS[mode].draw()
 }
 
@@ -84,7 +84,7 @@ function insert_char_rendered(key, index_y, index_x) {
 function switch_mode(mode_to_switch_to, args = []) { // args[0] is the key that triggered the mode switch. if none, then ""
 	mode = mode_to_switch_to
 	is_first_press_after_mode_switch = true
-	if (typeof(MODE_OBJECTS[mode].run == 'function'))
+	if (typeof(MODE_OBJECTS[mode].run) == 'function')
 		MODE_OBJECTS[mode].run(args)
 }
 
