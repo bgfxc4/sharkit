@@ -42,7 +42,12 @@ Gets called once every draw. Use it to render your cursor if you want one.
 
 ### mouseWheel(event)
 
-Gets triggered every time the mousewheel gets moved. Tho get the distance and direction, you can use `event.delta`.
+Gets triggered every time the mousewheel gets moved. To get the distance and direction, you can use `event.delta`.
+
+
+### mouseDragged(start_pos, current_pos)
+
+Gets triggered every time the mouse is moved while the left mouse button is pressed. As arguments you get passed `start_pos`, which is an object with the keys `start_pos.x` and `start_pos.y`, which represents the position, where the mouse drag started, and `current_pos`, also an object with the keys `current_pos.x` and `current_pos.y` which represents the current position of the mouse. Both are meassured in characteres that are rendered on the screen, and not in pixel.
 
 
 ### draw()

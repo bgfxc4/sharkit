@@ -5,6 +5,11 @@ var cursor_pos = {
 	y: 0
 }
 
+var mouse_drag_start_pos = {
+	x: -1,
+	y: -1
+}
+
 var scroll_offset = 0
 
 const MODES = {
@@ -205,27 +210,38 @@ function mouseWheel(event) {
 		MODE_OBJECTS[mode].mouseWheel(event)
 }
 
-function mousePressed() {
-	if (typeof(MODE_OBJECTS[mode].mousePressed) != 'function')
-		return
+function mouseDragged(event) {
+	var mouse_pos = get_mouse_coords()
+	if (typeof(MODE_OBJECTS[mode].mouseDragged) == 'function')
+		MODE_OBJECTS[mode].mouseDragged(mouse_drag_start_pos, mouse_pos)
+}
 
-	var clicked_y = -1
-	var clicked_x = -1
+function mousePressed() {
+	var mouse_pos = get_mouse_coords()
+	mouse_drag_start_pos = mouse_pos
+	if (typeof(MODE_OBJECTS[mode].mousePressed) == 'function')
+		MODE_OBJECTS[mode].mousePressed(mouse_pos.x, mouse_pos.y)
+}
+
+function get_mouse_coords() {
+	var pos = {
+		x: -1,
+		y: -1
+	}
 
 	for (var i = rendered_text_storage.length - scroll_offset; i > 0; i--) {
-		if (mouseY < i * text_size) clicked_y = i - 1
+		if (mouseY < i * text_size) pos.y = i - 1
 	}
 
-	if (clicked_y == -1) {
-		clicked_y = rendered_text_storage.length - 1 - scroll_offset
-		clicked_x = rendered_text_storage[clicked_y + scroll_offset].length - 1
+	if (pos.y == -1) {
+		pos.y = rendered_text_storage.length - 1 - scroll_offset
+		pos.x = rendered_text_storage[pos.y + scroll_offset].length - 1
 	} else {
-		for (var i = rendered_text_storage[clicked_y + scroll_offset].length + 1; i >= 0; i--) {
-			if (mouseX < text_width_all(rendered_text_storage[clicked_y + scroll_offset].substring(0, i )) + left_bar_size) clicked_x = i - 1
+		for (var i = rendered_text_storage[pos.y + scroll_offset].length + 1; i >= 0; i--) {
+			if (mouseX < text_width_all(rendered_text_storage[pos.y + scroll_offset].substring(0, i )) + left_bar_size) pos.x = i - 1
 		}
 	}
-
-	MODE_OBJECTS[mode].mousePressed(clicked_x, clicked_y)
+	return pos
 }
 
 function text_width_all(s) {

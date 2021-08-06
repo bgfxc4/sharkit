@@ -13,6 +13,8 @@ var COMMAND_MODE = {
 
 	mouseWheel: function (event) {},
 
+	mouseDragged: function (start_pos, current_pos) {},
+
 	draw: function() {},
 
 	run: function(args) {},
