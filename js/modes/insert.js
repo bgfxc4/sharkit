@@ -2,6 +2,8 @@ var INSERT_MODE = {
 	modeText: "INSERT",
 
 	trigger_keys: ['i'],
+	
+	mouse_drag_start: {x: -1, y: -1},
 
 	keyPressed: function() {
 		var real_cursor_pos = rendered_to_real_pos(cursor_pos.x, cursor_pos.y + scroll_offset)
@@ -76,6 +78,7 @@ var INSERT_MODE = {
 	mousePressed: function(clicked_x, clicked_y) {
 		cursor_pos.y = clicked_y
 		cursor_pos.x = (clicked_x == -1) ? rendered_text_storage[clicked_y].length : clicked_x
+		this.mouse_drag_start = cursor_pos
 	},
 
 	render_cursor: function () {
@@ -98,10 +101,6 @@ var INSERT_MODE = {
 			}
 		}
 	},
-
-	draw: function() {},
-
-	run: function(args) {},
 
 
 	// own functions

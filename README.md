@@ -15,7 +15,7 @@ Now you have to the the editor, what keys should trigger your mode from the norm
 
 To "register" your mode, you have to go into the file `js/main.js`, and at the top, to the object `MODES` add an key-value pair looking like the following: `[your mode name]: [previous number + 1]`. In the next object `MODE_OBJECTS` you have to add an element to the array. The element should be the name, that you wrote in you mode file in the first line (`[your mode name]_MODE`).
 
-To add functionality to your mode, you need to implement all of the following functions in your mode object. The  functions should already be declared, but empty (if not, you can have a look at `js/modes/mode_template.js`).
+To add functionality to your mode, you can implement the following functions in your mode object. The  functions should already be declared, but empty (if not, you can have a look at `js/modes/mode_template.js`).
 
 
 

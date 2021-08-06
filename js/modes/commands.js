@@ -41,8 +41,6 @@ var COMMAND_MODE = {
 		this.message.text = ""
 	},
 
-	mousePressed: function(clicked_x, clicked_y) {},
-
 	render_cursor: function () {
 		fill(120)
 		if (cursor_pos.x > 0) {
@@ -64,10 +62,6 @@ var COMMAND_MODE = {
 			text(this.message.text, 2 * text_width_all(":"), windowHeight - textAscent(":"))
 		}
 	},
-
-	mouseWheel: function (event) {},
-
-	draw: function() {},
 
 	run: function(args) {
 		this.message.col = color(255)

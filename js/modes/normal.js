@@ -24,10 +24,6 @@ var NORMAL_MODE = {
 		}
 	},
 
-	keyTyped: function() {
-
-	},
-
 	mousePressed: function(clicked_x, clicked_y) {
 		cursor_pos.y = clicked_y
 		cursor_pos.x = (clicked_x == -1) ? rendered_text_storage[clicked_y].length - 1 : clicked_x
@@ -61,10 +57,6 @@ var NORMAL_MODE = {
 			}
 		}
 	},
-
-	draw: function() {},
-
-	run: function(args) {},
 
 
 	// own functions, not required

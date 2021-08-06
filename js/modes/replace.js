@@ -34,8 +34,4 @@ var REPLACE_MODE = {
 	mouseWheel: function (event) {
 		switch_mode(MODES.NORMAL, [""])
 	},
-
-	draw: function() {},
-
-	run: function(args) {},
 }

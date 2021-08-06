@@ -56,8 +56,9 @@ function draw() {
 	render_text()
 	render_cursor()
 	render_mode()
-
-	MODE_OBJECTS[mode].draw()
+	
+	if (typeof(MODE_OBJECTS[mode].draw == 'function'))
+		MODE_OBJECTS[mode].draw()
 }
 
 function remove_char(index_y, index_x) {
@@ -83,7 +84,8 @@ function insert_char_rendered(key, index_y, index_x) {
 function switch_mode(mode_to_switch_to, args = []) { // args[0] is the key that triggered the mode switch. if none, then ""
 	mode = mode_to_switch_to
 	is_first_press_after_mode_switch = true
-	MODE_OBJECTS[mode].run(args)
+	if (typeof(MODE_OBJECTS[mode].run == 'function'))
+		MODE_OBJECTS[mode].run(args)
 }
 
 function rendered_to_real_pos(x, y) {
@@ -182,7 +184,8 @@ function parse_file_into_text_storage(contents) {
 }
 
 function keyPressed() {
-	MODE_OBJECTS[mode].keyPressed()
+	if (typeof(MODE_OBJECTS[mode].keyPressed) == 'function')
+		MODE_OBJECTS[mode].keyPressed()
 }
 
 function keyTyped() { // using different function for text input, bc it does not react to special keys
@@ -193,14 +196,19 @@ function keyTyped() { // using different function for text input, bc it does not
 
 	if (key == "Enter") return // Enter is already covered in "keyPressed"
 
-	MODE_OBJECTS[mode].keyTyped()
+	if (typeof(MODE_OBJECTS[mode].keyTyped) == 'function')
+		MODE_OBJECTS[mode].keyTyped()
 }
 
 function mouseWheel(event) {
-	MODE_OBJECTS[mode].mouseWheel(event)
+	if (typeof(MODE_OBJECTS[mode].mouseWheel) == 'function')
+		MODE_OBJECTS[mode].mouseWheel(event)
 }
 
 function mousePressed() {
+	if (typeof(MODE_OBJECTS[mode].mousePressed) != 'function')
+		return
+
 	var clicked_y = -1
 	var clicked_x = -1
 
@@ -283,7 +291,8 @@ function render_line_numbers() {
 }
 
 function render_cursor() {
-	MODE_OBJECTS[mode].render_cursor()
+	if (typeof(MODE_OBJECTS[mode].render_cursor) == 'function')
+		MODE_OBJECTS[mode].render_cursor()
 }
 
 function render_mode() {
