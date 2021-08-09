@@ -100,7 +100,9 @@ var INSERT_MODE = {
 	},
 
 	mouseDragged: function (start_pos, current_pos) {
-	
+		if (start_pos.x != current_pos.x || start_pos.y != current_pos.y) {
+			switch_mode(MODES.SELECT)
+		}	
 	},
 
 	// own functions
