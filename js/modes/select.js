@@ -43,9 +43,14 @@ var SELECT_MODE = {
 		for (var i = scroll_offset; i < rendered_text_storage.length && ((i - scroll_offset - (-1)) * text_size) < windowHeight - textAscent("A"); i++) {
 			if (this.selected_storage[i - scroll_offset] == undefined) continue
 			fill(255)
-			rect(text_width_all(rendered_text_storage[i].substring(0, this.selected_storage[i - scroll_offset].before)) + left_bar_size, 
-				(i - scroll_offset) * text_size + 0.2 * text_size,
-				text_width_all(rendered_text_storage[i].substr(this.selected_storage[i - scroll_offset].before, this.selected_storage[i - scroll_offset].length)), text_size)
+			if (rendered_text_storage[i] == "") {
+				rect(left_bar_size, (i - scroll_offset) * text_size + 0.2 * text_size, text_width_all(" "), text_size)
+			} else {
+				rect(text_width_all(rendered_text_storage[i].substring(0, this.selected_storage[i - scroll_offset].before)) + left_bar_size, 
+					(i - scroll_offset) * text_size + 0.2 * text_size,
+					text_width_all(rendered_text_storage[i].substr(this.selected_storage[i - scroll_offset].before, 
+					this.selected_storage[i - scroll_offset].length)), text_size)
+			}
 
 			fill(0)
 			text(rendered_text_storage[i].substr(this.selected_storage[i - scroll_offset].before, this.selected_storage[i - scroll_offset].length), 
