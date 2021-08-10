@@ -12,7 +12,7 @@ var SELECT_MODE = {
 	},
 
 	mouseDragged: function(start_pos, current_pos) {
-		if (current_pos.x > start_pos.x) current_pos.x += 1
+	//	if (current_pos.x > start_pos.x) current_pos.x += 1
 		this.selected_storage = []
 		var down = current_pos.y >= start_pos.y
 		for (var i = down ? start_pos.y : current_pos.y; i < (down ? current_pos.y : start_pos.y) + 1 && i < rendered_text_storage.length; i++) {
@@ -21,21 +21,16 @@ var SELECT_MODE = {
 				length: rendered_text_storage[i + scroll_offset].length
 			}
 
-			if (i == start_pos.y || i == current_pos.y) {
-				if (i == start_pos.y && i == current_pos.y) {
-					this.selected_storage[i].before = Math.min(start_pos.x, current_pos.x)
-					this.selected_storage[i].length = Math.max(1, Math.abs(start_pos.x - current_pos.x))
-				} else if ((i == start_pos.y && down) || (i == current_pos.y && !down)) {
-					this.selected_storage[i].before = (i == current_pos.y) ? current_pos.x : start_pos.x
-					this.selected_storage[i].length = rendered_text_storage[i + scroll_offset].length - ((i == current_pos.y) ? current_pos.x : start_pos.x)
-				} else if ((i == current_pos.y && down) || (i == start_pos.y && !down)) {
-					this.selected_storage[i].before = 0
-					this.selected_storage[i].length = (i == current_pos.y) ? current_pos.x : start_pos.x
-				}
+			if (i == start_pos.y && i == current_pos.y) {
+				this.selected_storage[i].before = Math.min(start_pos.x, current_pos.x)
+				this.selected_storage[i].length = Math.max(1, Math.abs(start_pos.x - current_pos.x) + 1)
+			} else if ((i == start_pos.y && down) || (i == current_pos.y && !down)) {
+				this.selected_storage[i].before = (i == current_pos.y) ? current_pos.x : start_pos.x
+				this.selected_storage[i].length = rendered_text_storage[i + scroll_offset].length - ((i == current_pos.y) ? current_pos.x : start_pos.x) + 1
+			} else if ((i == current_pos.y && down) || (i == start_pos.y && !down)) {
+				this.selected_storage[i].before = 0
+				this.selected_storage[i].length = ((i == current_pos.y) ? current_pos.x : start_pos.x) + 1
 			}
-
-			if (current_pos.x < start_pos.x)
-				this.selected_storage[i].length++
 		}
 	},
 
@@ -58,8 +53,10 @@ var SELECT_MODE = {
 		}
 	},
 
-	mousePressed: function() {
-		this.selected_storage = []
+	mousePressed: function(clicked_x, clicked_y) {
+		cursor_pos.x = clicked_x
+		cursor_pos.y = clicked_y
+		switch_mode(MODES.NORMAL)
 	},
 
 	run: function(args) {
