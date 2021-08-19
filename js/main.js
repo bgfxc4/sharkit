@@ -45,6 +45,12 @@ var rts_idx = 0
 
 var left_bar_size = text_size * 2
 
+var last_pressed_key = {
+	keyCode: undefined,
+	key: undefined
+}
+var held_down_time
+
 function setup() {
 	createCanvas(windowWidth, windowHeight)
 	frameRate(60)
@@ -66,6 +72,23 @@ function draw() {
 	
 	if (typeof(MODE_OBJECTS[mode].draw) == 'function')
 		MODE_OBJECTS[mode].draw()
+
+	if (keyIsDown(last_pressed_key.keyCode)) {
+		if (held_down_time < 20) {
+			console.log(held_down_time)
+			held_down_time++
+		} else {
+			if ([BACKSPACE, DELETE, ENTER, RETURN, TAB, ESCAPE, SHIFT, CONTROL, OPTION, ALT, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW].includes(keyCode)) {
+				keyPressed()
+			} else {
+				keyTyped()
+			}
+		}
+	} else {
+		last_pressed_key.keyCode = undefined
+		last_pressed_key.key = undefined
+		held_down_time = 0
+	}
 }
 
 function remove_char(index_y, index_x) {
@@ -191,6 +214,10 @@ function parse_file_into_text_storage(contents) {
 }
 
 function keyPressed() {
+	held_down_time = (keyCode == last_pressed_key.keyCode) ? 17 : 0
+	last_pressed_key.keyCode = keyCode
+	last_pressed_key.key = undefined
+
 	if (typeof(MODE_OBJECTS[mode].keyPressed) == 'function')
 		MODE_OBJECTS[mode].keyPressed()
 }
@@ -202,6 +229,10 @@ function keyTyped() { // using different function for text input, bc it does not
 	}
 
 	if (key == "Enter") return // Enter is already covered in "keyPressed"
+
+	held_down_time = (key == last_pressed_key.key) ? 17 : 0
+	last_pressed_key.keyCode = keyCode
+	last_pressed_key.key = key
 
 	if (typeof(MODE_OBJECTS[mode].keyTyped) == 'function')
 		MODE_OBJECTS[mode].keyTyped()
