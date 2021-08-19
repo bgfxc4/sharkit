@@ -31,6 +31,7 @@ var SELECT_MODE = {
 				this.selected_storage[i].before = 0
 				this.selected_storage[i].length = ((i == current_pos.y) ? current_pos.x : start_pos.x) + 1
 			}
+			this.selected_storage[i].before = Math.max(0, this.selected_storage[i].before)
 		}
 	},
 
